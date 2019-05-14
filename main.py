@@ -23,6 +23,10 @@ def _parse_args():
 def main(args):
     np.random.seed(432)
     torch.random.manual_seed(432)
+    try:
+        os.makedirs(args.outpath)
+    except OSError:
+        pass
     experiment_path = utils.get_new_model_path(args.outpath)
 
     train_writer = SummaryWriter(os.path.join(experiment_path, 'train_logs'))
