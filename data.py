@@ -28,7 +28,7 @@ id2label = {i: l for l, i in label2id.items()}
 
 class KFSDataset(Dataset):
     def __init__(self, data, transform):
-        super().__init__()
+        super(KFSDataset, self).__init__()
         self.data = data
         self.n_labels = len(LABELS)
         self.transform = transform
@@ -54,7 +54,7 @@ def load_data(dataroot, kind=None):
     df = pd.read_csv(csv_path, sep=',')
     data = []
     print('loading data')
-    for fname, s in tqdm(zip(df.fname.values, df.labels.values)):
+    for fname, s in tqdm(zip(df[u'fname'].values, df[u'labels'].values)):
         path = os.path.join(dataroot, kind, fname)
         labels = [label2id[k] for k in s.split(',')]
         data.append((path, labels))

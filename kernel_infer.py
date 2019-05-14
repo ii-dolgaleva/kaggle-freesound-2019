@@ -32,7 +32,7 @@ LABELS = ['Accelerating_and_revving_and_vroom', 'Accordion', 'Acoustic_guitar', 
 
 class KFSDataset(Dataset):
     def __init__(self, data, transform):
-        super().__init__()
+        super(KFSDataset, self).__init__()
         self.data = data
         self.n_labels = len(LABELS)
         self.transform = transform
@@ -85,7 +85,7 @@ class BasicBlock(nn.Module):
 class SingleChannelResnet(nn.Module):
     def __init__(self, block, layers, num_classes=80):
         self.inplanes = 64
-        super().__init__()
+        super(SingleChannelResnet, self).__init__()
         self.stem = nn.Sequential(
             nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3, bias=False),
             nn.BatchNorm2d(64),
