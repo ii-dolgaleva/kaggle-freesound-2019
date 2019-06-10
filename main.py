@@ -21,7 +21,7 @@ def _parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--datadir', default='/data/kaggle-freesound-2019')
     parser.add_argument('--outpath', default='/data/runs/')
-    parser.add_argument('--epochs', default=20)
+    parser.add_argument('--epochs', default=40)
     parser.add_argument('--batch_size', default=32)
     return parser.parse_args()
 
@@ -86,8 +86,8 @@ def main(args):
     
     lr_finder.reset()
 
-    fixed_lr = 1e-3
-#     fixed_lr = 3e-4
+#     fixed_lr = 1e-3
+    fixed_lr = 3e-4
     opt = torch.optim.Adam(model.parameters(), lr=fixed_lr)
     
 #     #new
@@ -97,9 +97,11 @@ def main(args):
 #     opt = torch.optim.Adam(model.parameters(), lr=lr)
 #     scheduler = CosineAnnealingLR(opt, T_max=t_max, eta_min=eta_min)
 #     #new
-    
+
 #     one cycle for 5 ehoches
-    scheduler = CosineAnnealingLR(opt, 519*4, eta_min=1e-4)
+#     scheduler = CosineAnnealingLR(opt, 519*4, eta_min=1e-4)
+    scheduler = CosineAnnealingLR(opt, args.epochs)
+    
 #     scheduler = CosineAnnealingLR(opt, 519, eta_min=1e-5)
 #     scheduler = StepLR(opt, step_size=3, gamma=0.1)
       

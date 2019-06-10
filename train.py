@@ -47,15 +47,15 @@ class Trainer:
 
         model = model.to(device)
         model.train()
-#         scheduler.step()
+        scheduler.step()
 
         logs = {}
         logs['lrap'] = []
         logs['loss'] = []
         logs['lr'] = []
         
-#         for param_group in optimizer.param_groups:
-#             param_group['lr'] = scheduler.get_lr()[0]
+        for param_group in optimizer.param_groups:
+            param_group['lr'] = scheduler.get_lr()[0]
 
 #             if param_group['lr'] < 1.2653e-4:
 #                 param_group['lr'] = 1.2653e-4
@@ -68,10 +68,10 @@ class Trainer:
             x = batch['logmel'].to(device)
             y = batch['labels'].to(device)
             
-            scheduler.step()
+#             scheduler.step()
             
-            for param_group in optimizer.param_groups:
-                param_group['lr'] = scheduler.get_lr()[0]
+#             for param_group in optimizer.param_groups:
+#                 param_group['lr'] = scheduler.get_lr()[0]
 
             optimizer.zero_grad()
             out = model(x)
