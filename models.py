@@ -53,6 +53,7 @@ class SingleChannelResnet(nn.Module):
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(512 * block.expansion, num_classes)
+#         self.fc =  nn.Sequential(nn.Dropout(0.75), nn.Linear(512 * block.expansion, num_classes))
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):

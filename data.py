@@ -78,6 +78,7 @@ def build_dataset(dataroot, transform):
 
 def build_preprocessing(ref_len=661500, batch_size=32, low_db=-10.0, high_db=120.0, mean_db=1.0, std_db=2.5):
     basic_transform = [
+#         torchaudio.transforms.MFCC(sr=44100),
         torchaudio.transforms.MelSpectrogram(sr=44100, n_fft=1764, hop=220, n_mels=64),
         torchaudio.transforms.SpectrogramToDB(),
         lambda _: torch.clamp(_, low_db, high_db),

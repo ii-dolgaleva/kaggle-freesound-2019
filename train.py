@@ -42,17 +42,36 @@ class Trainer:
         self.eval_writer = eval_writer
         self.compute_grads = compute_grads
 
-    def train_epoch(self, model, optimizer, dataloader, lr, log_prefix=""):
+    def train_epoch(self, model, optimizer, dataloader, lr, scheduler, log_prefix=""):
         device = self.device
 
         model = model.to(device)
         model.train()
-        for param_group in optimizer.param_groups:
-            param_group['lr'] = lr
+#         scheduler.step()
 
+        logs = {}
+        logs['lrap'] = []
+        logs['loss'] = []
+        logs['lr'] = []
+        
+#         for param_group in optimizer.param_groups:
+#             param_group['lr'] = scheduler.get_lr()[0]
+
+#             if param_group['lr'] < 1.2653e-4:
+#                 param_group['lr'] = 1.2653e-4
+#             param_group['lr'] = lr
+
+        print('scheduler.get_lr',scheduler.get_lr()[0])
+        print('optimizer.param_groups', optimizer.param_groups[0]['lr'])
+        
         for batch in tqdm(dataloader):
             x = batch['logmel'].to(device)
             y = batch['labels'].to(device)
+            
+            scheduler.step()
+            
+            for param_group in optimizer.param_groups:
+                param_group['lr'] = scheduler.get_lr()[0]
 
             optimizer.zero_grad()
             out = model(x)
@@ -62,12 +81,17 @@ class Trainer:
 
             probs = torch.sigmoid(out).cpu().data.numpy()
             lrap = label_ranking_average_precision_score(batch['labels'], probs)
-
             log_entry = dict(
                 lrap=lrap,
                 loss=loss.item(),
-                lr=lr,
+#                 lr=lr,
+                lr=scheduler.get_lr()[0],
             )
+            
+            logs['lrap'].append(lrap)
+            logs['loss'].append(loss.item())
+            logs['lr'].append(scheduler.get_lr()[0])
+            
             if self.compute_grads:
                 log_entry['grad_norm'] = grad_norm(model)
 
@@ -75,7 +99,14 @@ class Trainer:
                 if log_prefix != '':
                     name = log_prefix + '/' + name
                 self.train_writer.add_scalar(name, value, global_step=self.global_step)
+            
             self.global_step += 1
+            
+        fig = plt.figure(figsize=(12, 9))
+        plt.plot(logs['lr'], logs['loss'])
+        plt.xscale('log')
+        plt.grid()
+        self.train_writer.add_figure('loss_vs_lr_for_batch', fig, global_step=self.global_step)
 
     def eval_epoch(self, model, dataloader, log_prefix=""):
         if torch.cuda.is_available():
