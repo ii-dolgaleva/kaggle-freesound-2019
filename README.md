@@ -1,8 +1,9 @@
 
 # Проект Kaggle Freesound 2019 
 
-[a link](https://github.com/ii-dolgaleva/kaggle-freesound-2019/blob/master/EDA.ipynb)
-
 Ссылка на отчет по проекту: https://bit.ly/2K7eTjx
+
+[Ноутбук по исследованию данных EDA](https://github.com/ii-dolgaleva/kaggle-freesound-2019/blob/master/EDA.ipynb)
+
 
 P.S.: в текущем репозитории не все версии кодов запуска моделей (потому что с гитхабом разобралась совсем недавно). Но главное ведь, что все-таки разобралась! Лучше поздно, чем никогда! :)
