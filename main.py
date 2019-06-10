@@ -21,7 +21,7 @@ def _parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--datadir', default='/data/kaggle-freesound-2019')
     parser.add_argument('--outpath', default='/data/runs/')
-    parser.add_argument('--epochs', default=40)
+    parser.add_argument('--epochs', default=20)
     parser.add_argument('--batch_size', default=32)
     return parser.parse_args()
 
